@@ -1,0 +1,19 @@
+{
+  "name": "mvc",
+  "version": "1.0.0",
+  "description": "mvc-framework learn",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethan-marsh/mvc.git"
+  },
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3",
+    "typescript": "^3.5.2"
+  }
+}

@@ -1,5 +1,5 @@
-import * as api from '../api'
-import { AxiosResponse } from 'axios'
+import Eventing from './Eventing'
+import Sync from './Sync'
 
 export interface UserProps {
 	id?: number
@@ -8,29 +8,17 @@ export interface UserProps {
 }
 
 export default class User {
+	private dataEndpoint = `/users`
+	public events: Eventing = new Eventing()
+	public sync: Sync<UserProps> = new Sync<UserProps>(this.dataEndpoint)
+
 	constructor(private data: UserProps) { }
 
-	get(propertyName: keyof UserProps): (number | string) {
+	get<K extends keyof UserProps>(propertyName: K): UserProps[K] {
 		return this.data[propertyName]
 	}
 
 	set(updatedData: UserProps): void {
 		Object.assign(this.data, updatedData)
-	}
-
-	fetch(): void {
-		api.getUser(this.get(`id`))
-			.then((res: AxiosResponse) => {
-				this.set(res.data)
-			})
-	}
-
-	save(): void {
-		const id = this.get(`id`)
-		if (id) {
-			api.updateUser(id, this.data)
-		} else {
-			api.createNewUser(this.data)
-		}
 	}
 }

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "mvc-framework mockup",
   "main": "index.js",
+  "engines": {
+    "node": ">=8.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ethan-marsh/mvc.git"

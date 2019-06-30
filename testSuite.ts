@@ -13,12 +13,13 @@ const FAIL = `FAIL`
 export const test: Test = (testName, fn) => {
 	const { printTestResult, printFailDetail } = testUtils
 	const testResult = fn()
+
 	printTestResult(testName, testResult.value)
 	if (testResult.failDetail) {
 		printFailDetail(testResult.failDetail)
 	}
 }
-// Alias to use "it" or "test"
+// Test with alias "it" or "test"
 export const it = test
 
 export const expect: Expect = actual => {
@@ -26,8 +27,7 @@ export const expect: Expect = actual => {
 		let testResult: PassOrFail = actual === expected ? PASS : FAIL
 
 		const isFailedFnRefComparison =
-			typeof expected === `function`
-			&& testResult === FAIL
+			typeof expected === `function` && testResult === FAIL
 		const useFunctionStringComparison = () =>
 			expected.toString() === actual.toString() ? PASS : FAIL
 		if (isFailedFnRefComparison) {
@@ -38,7 +38,10 @@ export const expect: Expect = actual => {
 			? `%c Expected: %c ${expected} %c \n Received: %c ${actual}`
 			: ''
 
-		return { value: testResult, failDetail }
+		return {
+			value: testResult,
+			failDetail,
+		}
 	}
 
 	return { toBe }
@@ -50,8 +53,11 @@ const testUtils = {
 		console.log(`%c ${label}: %c ${res}`, consoleCss.italic, resultStyle)
 	},
 	printFailDetail: (error: string): void => {
-		const { italic, red, green, grey } = consoleCss
-		console.log(error, grey, green + italic, grey, red + italic)
+		const { italic, red, green, grey: labelStyle } = consoleCss
+		const expectedValueStyle = italic + red
+		const receivedValueStyle = italic + green
+
+		console.log(error, labelStyle, expectedValueStyle, labelStyle, receivedValueStyle)
 	},
 	getTestResultColor: (testResult: string): string => {
 		const { green, grey, red } = consoleCss

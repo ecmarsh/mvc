@@ -1,24 +1,35 @@
+import Model from './Model'
+import Attributes from './Attributes'
+import ApiSync from './ApiSync'
 import Eventing from './Eventing'
-import Sync from './Sync'
 
 export interface UserProps {
+	[key: string]: any
 	id?: number
 	name?: string
 	age?: number
 }
 
-export default class User {
-	private dataEndpoint = `/users`
-	public events: Eventing = new Eventing()
-	public sync: Sync<UserProps> = new Sync<UserProps>(this.dataEndpoint)
-
-	constructor(private data: UserProps) { }
-
-	get<K extends keyof UserProps>(propertyName: K): UserProps[K] {
-		return this.data[propertyName]
+export default class User extends Model<UserProps> {
+	static dataEndpoint = `/users`
+	static ids: number[] = [1]
+	static getNextId = (): number => {
+		const id = User.ids[User.ids.length - 1]
+		User.incrementId(id)
+		return id
 	}
+	static incrementId = (prevId: number): void => {
+		const nextId = prevId + 1
+		User.ids.push(nextId)
+	}
+	static buildUser = (attrs: UserProps): User => {
+		const id = User.getNextId()
+		const initialAttrs = Object.assign({}, attrs, { id })
 
-	set(updatedData: UserProps): void {
-		Object.assign(this.data, updatedData)
+		return new User(
+			new Attributes<UserProps>(initialAttrs),
+			new Eventing(),
+			new ApiSync<UserProps>(User.dataEndpoint)
+		)
 	}
 }

@@ -1,10 +1,7 @@
 import * as api from '../api'
+import { ModelData } from './Model'
 
-interface HasId {
-	id?: number
-}
-
-export default class ApiSync<T extends HasId> {
+export default class ApiSync<T extends ModelData> {
 	constructor(private endpoint: string) { }
 
 	fetch = (id: number): api.ApiPromise => {

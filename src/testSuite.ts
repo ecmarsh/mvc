@@ -1,3 +1,5 @@
+import { compareToStringEquality } from './utils'
+
 type Test = (testName: string, fn: () => TestResult) => void
 type Expect = (actual: any) => { toBe: ToBe }
 type ToBe = (expected: any) => TestResult
@@ -28,10 +30,10 @@ export const expect: Expect = actual => {
 
 		const isFailedFnRefComparison =
 			typeof expected === `function` && testResult === FAIL
-		const useFunctionStringComparison = () =>
-			expected.toString() === actual.toString() ? PASS : FAIL
 		if (isFailedFnRefComparison) {
-			testResult = useFunctionStringComparison()
+			testResult = compareToStringEquality(expected, actual)
+				? PASS
+				: FAIL
 		}
 
 		const failDetail = testResult === FAIL

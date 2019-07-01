@@ -1,16 +1,19 @@
 import axios, { AxiosResponse, AxiosPromise, AxiosError } from 'axios'
+import { trimSlashPadding as trimmed } from './utils'
+import { ModelData } from './models/Model'
+
+
+const { DB_PORT } = process.env
+const baseURL = `http://localhost:${DB_PORT}`
+const api = axios.create({ baseURL })
+
 
 type ApiResponse = AxiosResponse
 type ApiPromise = AxiosPromise
 type ApiError = AxiosError
 type Id = number
+export { ApiResponse, ApiPromise, ApiError }
 
-interface ModelData {
-	id?: Id
-}
-
-const baseURL = `http://localhost:${process.env.DB_PORT}`
-const api = axios.create({ baseURL })
 
 type POST = (endpoint: string, data: ModelData) => ApiPromise
 const createModel: POST = (endpoint, data) => {
@@ -22,22 +25,14 @@ const updateModel: PUT = (endpoint, id, data) => {
 	return api.put(`/${trimmed(endpoint)}/${id}`, data)
 }
 
-type GET = (endpoint: string, id: Id) => ApiPromise
-const getModel: GET = (endpoint, id) => {
+type GET_Model = (endpoint: string, id: Id) => ApiPromise
+const getModel: GET_Model = (endpoint, id) => {
 	return api.get(`/${trimmed(endpoint)}/${id}`)
 }
-type GET_ALL = (endpoint: string) => ApiPromise
-const getCollection: GET_ALL = (endpoint) => {
+
+type GET_Collection = (endpoint: string) => ApiPromise
+const getCollection: GET_Collection = endpoint => {
 	return api.get(`/${trimmed(endpoint)}/`)
 }
 
-
-// API Types
-export { ApiResponse, ApiPromise, ApiError }
-
-// API Functions
 export { createModel, updateModel, getModel, getCollection }
-
-// Helpers
-const trimSlashes = (str: string): string => str.replace(/^\/|\/$/g, '')
-const trimmed = trimSlashes

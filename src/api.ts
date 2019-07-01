@@ -23,8 +23,12 @@ const updateModel: PUT = (endpoint, id, data) => {
 }
 
 type GET = (endpoint: string, id: Id) => ApiPromise
-const getModel: GET = async (endpoint, id) => {
+const getModel: GET = (endpoint, id) => {
 	return api.get(`/${trimmed(endpoint)}/${id}`)
+}
+type GET_ALL = (endpoint: string) => ApiPromise
+const getCollection: GET_ALL = (endpoint) => {
+	return api.get(`/${trimmed(endpoint)}/`)
 }
 
 
@@ -32,7 +36,7 @@ const getModel: GET = async (endpoint, id) => {
 export { ApiResponse, ApiPromise, ApiError }
 
 // API Functions
-export { createModel, updateModel, getModel }
+export { createModel, updateModel, getModel, getCollection }
 
 // Helpers
 const trimSlashes = (str: string): string => str.replace(/^\/|\/$/g, '')

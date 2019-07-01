@@ -1,6 +1,6 @@
 import { ApiPromise } from '../api'
 
-type Callback = (...args: any[]) => any
+type Callback = (...args: any[]) => void
 
 interface ModelAttributes<T> {
 	get: <K extends keyof T>(key: K) => T[K]
@@ -30,38 +30,28 @@ export default class Model<T extends HasId> {
 	) { }
 
 	// ATTRIBUTES
-	get get() {
-		return this.attributes.get
-	}
-	set(updatedData: T): void {
-		this.attributes.set(updatedData)
-		this.events.trigger(`change`)
-	}
+	get = this.attributes.get
+	set = (updatedData: T): T => this.attributes.set(updatedData)
 
 	// EVENTS
-	get on() {
-		return this.events.on
-	}
-	get trigger() {
-		return this.events.trigger
-	}
+	on = this.events.on
+	trigger = this.events.trigger
 
 	// SYNC
-	fetch(): void {
+	fetch = (): void => {
 		const id = this.get(`id`)
-
-		if (!id) {
-			throw Error('Must have ID to fetch')
-		}
-
-		this.sync.fetch(id)
-			.then(res => { res.data && this.set(res.data) })
-			.catch(err => { this.trigger('error', err) })
+		id && this.sync.fetch(id)
+			.then(res => res.data)
+			.then(data => {
+				this.set(data)
+				this.trigger('fetched', data.toString())
+			})
+			.catch(err => { this.trigger('error') })
 	}
-
-	save(): void {
+	save = (): void => {
 		this.sync.save(this.attributes.getAll())
-			.then(res => { this.trigger('save', res.data) })
-			.catch(err => { this.trigger('error', err) })
+			.then(res => { res && this.set(res.data) })
+			.catch(err => { this.trigger('error') })
 	}
+
 }

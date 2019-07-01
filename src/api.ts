@@ -35,21 +35,5 @@ export { ApiResponse, ApiPromise, ApiError }
 export { createModel, updateModel, getModel }
 
 // Helpers
-const trimSlashes = (str: string): string => {
-	const ref = [str]
-	const isLeadingSlash = /^\//.test(str)
-	const isTrailingSlash = /\/$/.test(str)
-	const trimLeadingSlash = () => { ref[0] = ref[0].substring(1) }
-	const trimTrailingSlash = () => { ref[0] = ref[0].substring(0, str.length - 1) }
-
-	if (isLeadingSlash) {
-		trimLeadingSlash()
-	}
-	if (isTrailingSlash) {
-		trimTrailingSlash()
-	}
-
-	const trimmedStr = ref[0]
-	return trimmedStr
-}
+const trimSlashes = (str: string): string => str.replace(/^\/|\/$/g, '')
 const trimmed = trimSlashes

@@ -1,6 +1,5 @@
 import { ApiPromise } from '../api'
-
-type Callback = (...args: any[]) => void
+import { EventCallback } from './Eventing'
 
 interface ModelAttributes<T> {
 	get: <K extends keyof T>(key: K) => T[K]
@@ -14,15 +13,17 @@ interface Sync<T> {
 }
 
 interface Events {
-	on: (eventName: string, callback: Callback) => void
+	on: (eventName: string, callback: EventCallback) => void
+	off: (eventName?: string, callback?: EventCallback) => void
 	trigger: (eventName: string, ...args: any[]) => void
 }
 
-interface HasId {
+export interface ModelData {
+	[key: string]: any
 	id?: number
 }
 
-export default class Model<T extends HasId> {
+export default class Model<T extends ModelData> {
 	constructor(
 		private attributes: ModelAttributes<T>,
 		private events: Events,
@@ -35,6 +36,7 @@ export default class Model<T extends HasId> {
 
 	// EVENTS
 	on = this.events.on
+	off = this.events.off
 	trigger = this.events.trigger
 
 	// SYNC
@@ -54,4 +56,6 @@ export default class Model<T extends HasId> {
 			.catch(err => { this.trigger('error') })
 	}
 
+	// MODEL
+	isNew = (): boolean => (`id` in this.attributes.getAll())
 }

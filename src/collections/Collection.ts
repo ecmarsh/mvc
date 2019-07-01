@@ -17,6 +17,9 @@ export default class Collection<T, U> {
 	public get on() {
 		return this.events.on
 	}
+	public get off() {
+		return this.events.off
+	}
 
 	public get trigger() {
 		return this.events.trigger

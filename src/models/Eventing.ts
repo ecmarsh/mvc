@@ -22,7 +22,7 @@ export default class Eventing {
 				callback === callbackArg
 				|| compareToStringEquality(callback, callbackArg)
 
-			return this.events[eventName].filter(cb => isCallbackMatch(cb))
+			return this.events[eventName].filter(isCallbackMatch)
 		}
 		const removeAllEventCallbacks = (): void => {
 			delete this.events[eventName]

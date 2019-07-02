@@ -1,6 +1,6 @@
 {
   "name": "mvc",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "mvc-framework mockup",
   "main": "index.js",
   "engines": {
@@ -11,18 +11,21 @@
     "url": "git+https://github.com/ethan-marsh/mvc.git"
   },
   "scripts": {
-    "dev": "parcel index.html",
+    "start": "concurrently npm:start:*",
+    "start:dev": "parcel index.html",
+    "start:db": "json-server -w db.json",
     "build": "parcel build index.html",
-    "db": "json-server -w db.json"
+    "reinstall:force": "rm -r -f node_modules && rm -f package-lock.json && npm install"
   },
   "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^12.0.10",
-    "parcel-bundler": "^1.12.3",
-    "typescript": "^3.5.2"
-  },
   "dependencies": {
     "axios": "^0.19.0",
     "json-server": "^0.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.0.10",
+    "concurrently": "^4.1.1",
+    "parcel-bundler": "^1.12.3",
+    "typescript": "^3.5.2"
   }
 }

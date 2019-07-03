@@ -16,7 +16,7 @@ export default class User extends Model<UserProps> {
 
 	static init = (attrs: UserProps): User => {
 		delete attrs.id
-		const user = User.construct({ ...attrs })
+		const user = User.build(attrs)
 		user.save()
 		return user
 	}
@@ -25,7 +25,7 @@ export default class User extends Model<UserProps> {
 		return User.construct({ ...attrs })
 	}
 
-	static collection = () => {
+	static createCollection = () => {
 		return new Collection<User, UserProps>(
 			User.dataEndpoint,
 			(json: UserProps) => User.build(json)

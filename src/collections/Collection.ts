@@ -29,10 +29,10 @@ export default class Collection<T, U extends ModelData> {
 
 	public fetch = (): void => {
 		api.getCollection(this.endpoint)
-			.then(res => {
+			.then((res: api.ApiResponse) => {
 				this.updateModels(res.data)
 			})
-			.catch(err => {
+			.catch((err: api.ApiError) => {
 				console.error('Collection fetch error:', err)
 			})
 	}

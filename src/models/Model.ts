@@ -1,5 +1,6 @@
 import { ApiPromise } from '../api'
 import { EventCallback } from './Eventing'
+import { compareDeep } from '../utils'
 
 interface ModelAttributes<T> {
 	get: <K extends keyof T>(key: K) => T[K]
@@ -32,7 +33,16 @@ export default class Model<T extends ModelData> {
 
 	// ATTRIBUTES
 	get = this.attributes.get
-	set = (updatedData: T): T => this.attributes.set(updatedData)
+	set = (updatedData: T): T => {
+		const prevData = this.attributes.getAll()
+		const hasChanged = compareDeep(prevData, updatedData)
+		if (hasChanged) {
+			this.attributes.set(updatedData)
+			this.trigger('change')
+		}
+
+		return updatedData
+	}
 
 	// EVENTS
 	on = this.events.on
@@ -55,7 +65,4 @@ export default class Model<T extends ModelData> {
 			.then(res => { res && this.set(res.data) })
 			.catch(err => { this.trigger('error') })
 	}
-
-	// MODEL
-	isNew = (): boolean => (`id` in this.attributes.getAll())
 }

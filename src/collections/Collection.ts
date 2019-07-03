@@ -1,14 +1,16 @@
 import * as api from '../api'
 import Eventing from '../models/Eventing'
+import { ModelData } from '../models/Model'
 
+type Deserializer<T, U> = (json: U) => T
 
-export default class Collection<T, U> {
+export default class Collection<T, U extends ModelData> {
 	private models: Array<T>
 	private events: Eventing
 
 	constructor(
 		private endpoint: string,
-		private deserialize: (json: U) => T
+		private deserialize: Deserializer<T, U>
 	) {
 		this.models = []
 		this.events = new Eventing()

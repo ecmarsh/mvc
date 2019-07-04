@@ -1,6 +1,6 @@
-import { ApiPromise } from '../api'
+import { ApiPromise, ApiResponse, ApiError } from '../api'
 import { EventCallback } from './Eventing'
-import { compareDeep } from '../utils'
+import { compareDeep, typeGuard } from '../utils'
 
 interface ModelAttributes<T> {
 	get: <K extends keyof T>(key: K) => T[K]
@@ -32,10 +32,10 @@ export default class Model<T extends ModelData> {
 	) { }
 
 	// ATTRIBUTES
-	get = this.attributes.get
-	set = (updatedData: T): T => {
+	public get = this.attributes.get
+	public set = (updatedData: T): T => {
 		const prevData = this.attributes.getAll()
-		const hasChanged = compareDeep(prevData, updatedData)
+		const hasChanged = !compareDeep(prevData, updatedData)
 		if (hasChanged) {
 			this.attributes.set(updatedData)
 			this.trigger('change')
@@ -45,24 +45,27 @@ export default class Model<T extends ModelData> {
 	}
 
 	// EVENTS
-	on = this.events.on
-	off = this.events.off
-	trigger = this.events.trigger
+	public on = this.events.on
+	public off = this.events.off
+	public trigger = this.events.trigger
 
 	// SYNC
-	fetch = (): void => {
+	public fetch = (): void => {
 		const id = this.get(`id`)
-		id && this.sync.fetch(id)
-			.then(res => res.data)
-			.then(data => {
-				this.set(data)
-				this.trigger('fetched', data.toString())
-			})
-			.catch(err => { this.trigger('error') })
+		if (typeGuard.isNumber(id)) {
+			this.sync.fetch(id)
+				.then((res: ApiResponse) => res.data)
+				.then((data: any) => {
+					this.set(data)
+					this.trigger('fetched', data.toString())
+				})
+				.catch((err: ApiError) => { this.trigger('error') })
+		}
 	}
-	save = (): void => {
+
+	public save = (): void => {
 		this.sync.save(this.attributes.getAll())
-			.then(res => { res && this.set(res.data) })
-			.catch(err => { this.trigger('error') })
+			.then((res: ApiResponse) => { res && this.set(res.data) })
+			.catch((err: ApiError) => { this.trigger('error', err) })
 	}
 }

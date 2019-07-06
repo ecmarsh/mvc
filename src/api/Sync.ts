@@ -1,6 +1,7 @@
-import api from '../api'
+import api from './index'
+import { ApiPromise, ApiResponse, ModelData } from './types'
 
-export default class ApiSync<T extends ModelData> {
+export class Sync<T extends ModelData> {
 	constructor(private endpoint: string) { }
 
 	fetch = (id: number): ApiPromise => {

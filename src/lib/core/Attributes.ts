@@ -1,4 +1,6 @@
-export default class Attributes<T> {
+import { AttrHandler } from './types'
+
+export default class Attributes<T> implements AttrHandler<T> {
 	constructor(private data: T) {
 		this.data = Object.assign({}, data)
 	}

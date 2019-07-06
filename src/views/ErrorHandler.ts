@@ -1,6 +1,6 @@
 type ErrorMessage = string
 
-export default class ErrorHandler {
+export class ErrorHandler {
 	protected errorMessage: ErrorMessage
 
 	constructor() {
@@ -20,14 +20,19 @@ export default class ErrorHandler {
 	}
 
 	public flash = (): string => {
+		const style = `
+			padding: 10px 20px;
+      border-left: 10px solid red;
+		`
+
 		if (this.get()) {
 			return `
-				<div class="error">
+				<div class="error" style="${style}">
 					<strong>Shoot!</strong>&nbsp;${this.get()}
 				</div>
 			`
 		} else {
-			return `<span></span>`
+			return `<span><!--Errors Here--></span>`
 		}
 	}
 }

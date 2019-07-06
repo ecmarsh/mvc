@@ -1,5 +1,5 @@
-import Api, { initApi } from './Api'
-import ApiSync from './Sync'
+import { initApi } from './Api'
 
-export default initApi(process.env.DB_PORT)(Api)
-export { ApiSync }
+// Use a singleton api instance
+export default initApi(process.env.DB_PORT)
+export { Sync as ApiSync } from './Sync'

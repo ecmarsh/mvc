@@ -1,6 +1,7 @@
 import Model from './Model'
 import Template from './Template'
 import { createOrGetElement } from '../elementKit'
+import { EventMap, DOMRenderer } from './types'
 
 export default abstract class View<T extends Model<U>, U> {
 	abstract render: () => string

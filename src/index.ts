@@ -1,6 +1,6 @@
 import { Dom, NodeMap } from './lib'
 
-import User, { UserProps } from './models/User'
+import { User, UserProps } from './models/User'
 import { UserForm, UserInfo } from './views/User'
 
 const sampleProps = {

@@ -1,4 +1,6 @@
+import { ModelData, AttrHandler, Observes, Synchronizes } from './types'
 import { compareDeep } from '../utils'
+
 
 export default class Model<T extends ModelData> {
 	constructor(
@@ -20,7 +22,7 @@ export default class Model<T extends ModelData> {
 		return updatedData
 	}
 
-	// EVENTS
+	// OBSERVER
 	public on = this.observer.on
 	public off = this.observer.off
 	public trigger = this.observer.trigger

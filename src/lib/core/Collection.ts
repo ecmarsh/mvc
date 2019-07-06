@@ -1,5 +1,6 @@
-import api from '../../api'
 import Observer from './Observer'
+import api from '../../api'
+import { ModelData, Deserializer, } from './types'
 
 export default class Collection<T, U extends ModelData> {
 	private models: Array<T>

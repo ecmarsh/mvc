@@ -1,6 +1,7 @@
+import { Observes, ObservedEvents, EventCallback } from './types'
 import { compareToStringEquality } from '../utils'
 
-export default class Observer {
+export default class Observer implements Observes {
 	events: ObservedEvents = {}
 
 	on = (eventName: string, callback: EventCallback): void => {

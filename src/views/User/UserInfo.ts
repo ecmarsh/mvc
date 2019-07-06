@@ -1,7 +1,7 @@
-import UserView from './UserView'
+import { UserView } from './UserView'
 import { createPropList } from './createPropList'
 
-export default class UserInfo extends UserView {
+export class UserInfo extends UserView {
 	constructor(model: UserView['model'], selector: string) {
 		super(model, selector)
 		this.eventMap = {

@@ -1,6 +1,8 @@
-import { createOrGetElement } from '../elementKit'
 import Model from './Model'
 import View from './View'
+import { createOrGetElement } from '../elementKit'
+import { Renderable } from './types'
+
 
 export interface NodeMap<T extends Model<U>, U> {
 	[cssLikeSelector: string]: (cssLikeSelector: string) => View<T, U>

@@ -1,5 +1,5 @@
-import UserView from './UserView'
-import ErrorHandler from '../ErrorHandler';
+import { UserView } from './UserView'
+import { ErrorHandler } from '../ErrorHandler';
 
 type InputElement = HTMLInputElement | null
 
@@ -10,7 +10,7 @@ interface InputSelector {
 type AttributeValue = string
 
 
-export default class UserForm extends UserView {
+export class UserForm extends UserView {
 	private errorHandler: ErrorHandler
 
 	constructor(model: UserView['model'], selector: string) {
@@ -49,11 +49,13 @@ export default class UserForm extends UserView {
 			const inputElement = this.parent.querySelector(selector)
 			return inputElement as InputElement
 		}
+
 		function resetInputValues(...inputElements: HTMLInputElement[]): void {
 			inputElements.forEach(inputElement => {
 				clearInputValueFrom(inputElement)
 			})
 		}
+
 		function clearInputValueFrom(inputElement: HTMLInputElement): void {
 			inputElement.value = ''
 		}
@@ -64,25 +66,33 @@ export default class UserForm extends UserView {
 			this.errorHandler.set(errorMessage)
 			this.model.trigger('change')
 
+			const msToFlashError = 8000
+
 			setTimeout(() => {
 				this.errorHandler.clear()
 				this.model.trigger('change')
-			}, 8000)
+			}, msToFlashError)
 		})
 	}
 
 	render = (): string => `
 		<form>
 			${this.errorHandler.flash()}
+
 			<label>User Name
 				<input type="text" placeholder="New User Name" />
 			</label>
+
+			<br />
 
 			<label>User Age
 				<input type="number" placeholder="New User Age"/>
 			</label>
 
+			<br />
+
 			<button type="submit">Save User Data</button>
+
 		</form>
 	`
 }

@@ -1,4 +1,2 @@
-import UserForm from './UserForm'
-import UserInfo from './UserInfo'
-
-export { UserForm, UserInfo }
+export { UserForm } from './UserForm'
+export { UserInfo } from './UserInfo'

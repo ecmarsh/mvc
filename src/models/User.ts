@@ -1,5 +1,5 @@
 import { Attributes, Collection, Model, Observer } from '../lib'
-import ApiSync from '../api/Sync'
+import { ApiSync } from '../api'
 
 export interface UserProps {
 	[key: string]: any
@@ -8,7 +8,7 @@ export interface UserProps {
 	age?: number
 }
 
-export default class User extends Model<UserProps> {
+export class User extends Model<UserProps> {
 	static dataEndpoint = `/users`
 
 	static init = (attrs: UserProps): User => {

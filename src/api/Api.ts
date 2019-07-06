@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { trimSlashPadding as trimmed } from '../lib/utils'
+import { AxiosWrapper, ApiInstance, CreateModel, UpdateModel, GetModel, GetCollection, InitApi } from './types'
 
-class Api {
-	public api: AxiosInstance
+export class Api implements AxiosWrapper {
+	public api: ApiInstance
 
 	constructor(public baseURL: string) {
 		this.api = axios.create({ baseURL })
@@ -25,9 +26,9 @@ class Api {
 	}
 }
 
-export const initApi = (port?: string) => {
+export const initApi: InitApi = port => {
 	const baseURL = `http://localhost:${port}`
-	return (Api: ModelApi): Api => new Api(baseURL)
+	return new Api(baseURL)
 }
 
 export default Api

@@ -1,5 +1,5 @@
 import { minify } from '../utils'
-
+import { TemplateContent } from './types'
 
 
 export interface ViewTemplate {

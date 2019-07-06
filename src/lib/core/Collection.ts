@@ -1,19 +1,16 @@
-import * as api from '../api'
-import Eventing from '../models/Eventing'
-import { ModelData } from '../models/Model'
-
-type Deserializer<T, U> = (json: U) => T
+import api from '../../api'
+import Observer from './Observer'
 
 export default class Collection<T, U extends ModelData> {
 	private models: Array<T>
-	private events: Eventing
+	private events: Observer
 
 	constructor(
 		private endpoint: string,
 		private deserialize: Deserializer<T, U>
 	) {
 		this.models = []
-		this.events = new Eventing()
+		this.events = new Observer()
 	}
 
 	public get on() {
@@ -29,10 +26,10 @@ export default class Collection<T, U extends ModelData> {
 
 	public fetch = (): void => {
 		api.getCollection(this.endpoint)
-			.then((res: api.ApiResponse) => {
+			.then((res: any) => {
 				this.updateModels(res.data)
 			})
-			.catch((err: api.ApiError) => {
+			.catch((err: any) => {
 				console.error('Collection fetch error:', err)
 			})
 	}

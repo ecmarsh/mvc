@@ -1,6 +1,6 @@
 import { minify } from '../utils'
 
-export type TemplateContent = DocumentFragment
+
 
 export interface ViewTemplate {
 	set: (markup: string) => void

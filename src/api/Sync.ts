@@ -1,12 +1,11 @@
-import * as api from '../api'
-import { ModelData } from './Model'
+import api from '../api'
 
 export default class ApiSync<T extends ModelData> {
 	constructor(private endpoint: string) { }
 
-	fetch = (id: number): api.ApiPromise => {
+	fetch = (id: number): ApiPromise => {
 		return api.getModel(this.endpoint, id)
-			.then((res: api.ApiResponse) => res.data)
+			.then((res: ApiResponse) => res.data)
 	}
 
 	save = async (data: T): Promise<any> => {

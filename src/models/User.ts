@@ -1,8 +1,5 @@
-import Model from './Model'
-import Collection from '../collections/Collection'
-import Attributes from './Attributes'
-import ApiSync from './ApiSync'
-import Eventing from './Eventing'
+import { Attributes, Collection, Model, Observer } from '../lib'
+import ApiSync from '../api/Sync'
 
 export interface UserProps {
 	[key: string]: any
@@ -34,7 +31,7 @@ export default class User extends Model<UserProps> {
 
 	private static construct = (attrs: UserProps): User => new User(
 		new Attributes<UserProps>(attrs),
-		new Eventing(),
+		new Observer(),
 		new ApiSync<UserProps>(User.dataEndpoint)
 	)
 }

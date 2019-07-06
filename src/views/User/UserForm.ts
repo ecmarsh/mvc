@@ -1,4 +1,4 @@
-import { UserView } from './UserView'
+import { UserView, UserModel } from './UserView'
 import { ErrorHandler } from '../ErrorHandler';
 
 type InputElement = HTMLInputElement | null
@@ -13,7 +13,7 @@ type AttributeValue = string
 export class UserForm extends UserView {
 	private errorHandler: ErrorHandler
 
-	constructor(model: UserView['model'], selector: string) {
+	constructor(model: UserModel, selector: string) {
 		super(model, selector)
 		this.eventMap = {
 			'submit:form': this.onSubmit,

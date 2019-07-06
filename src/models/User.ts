@@ -1,5 +1,6 @@
 import { Attributes, Collection, Model, Observer } from '../lib'
-import { ApiSync } from '../api'
+import { ApiSync } from '../lib/api'
+import api from '../api'
 
 export interface UserProps {
 	[key: string]: any
@@ -24,14 +25,15 @@ export class User extends Model<UserProps> {
 
 	static createCollection = () => {
 		return new Collection<User, UserProps>(
+			(json: UserProps) => User.build(json),
+			api,
 			User.dataEndpoint,
-			(json: UserProps) => User.build(json)
 		)
 	}
 
 	private static construct = (attrs: UserProps): User => new User(
 		new Attributes<UserProps>(attrs),
 		new Observer(),
-		new ApiSync<UserProps>(User.dataEndpoint)
+		new ApiSync<UserProps>(api, User.dataEndpoint)
 	)
 }

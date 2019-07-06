@@ -1,14 +1,15 @@
 import Observer from './Observer'
-import api from '../../api'
-import { ModelData, Deserializer, } from './types'
+import { ModelData, Deserializer } from './types'
+import { Api } from '../api'
 
 export default class Collection<T, U extends ModelData> {
 	private models: Array<T>
 	private events: Observer
 
 	constructor(
+		private deserialize: Deserializer<T, U>,
+		private api: Api,
 		private endpoint: string,
-		private deserialize: Deserializer<T, U>
 	) {
 		this.models = []
 		this.events = new Observer()
@@ -26,7 +27,7 @@ export default class Collection<T, U extends ModelData> {
 	}
 
 	public fetch = (): void => {
-		api.getCollection(this.endpoint)
+		this.api.getCollection(this.endpoint)
 			.then((res: any) => {
 				this.updateModels(res.data)
 			})

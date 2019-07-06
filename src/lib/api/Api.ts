@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { trimSlashPadding as trimmed } from '../lib/utils'
+import { trimSlashPadding as trimmed } from '../utils'
 import { AxiosWrapper, ApiInstance, CreateModel, UpdateModel, GetModel, GetCollection, InitApi } from './types'
 
 export class Api implements AxiosWrapper {

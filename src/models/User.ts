@@ -23,7 +23,7 @@ export class User extends Model<UserProps> {
 		return User.construct({ ...attrs })
 	}
 
-	static createCollection = () => {
+	static createCollection = (): Collection => {
 		return new Collection<User, UserProps>(
 			(json: UserProps) => User.build(json),
 			api,

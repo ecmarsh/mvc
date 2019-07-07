@@ -1,8 +1,6 @@
 import Model from './Model'
 import View from './View'
 import { createOrGetElement } from '../elementKit'
-import { Renderable } from './types'
-
 
 export interface RegionMap<T extends Model<U>, U> {
 	[cssLikeSelector: string]: (parent: Element) => View<T, U>
@@ -13,18 +11,15 @@ export interface NodeMap {
 }
 
 export default class Dom {
-	static renderAll = (...renderables: Renderable[]): void => {
-		renderables.forEach(renderable => renderable.renderDOM())
-	}
-
-	static renderNodeMap = <T extends Model<U>, U>(parentSelector: string, nodeMap: RegionMap<T, U>): void => {
+	static render = <T extends Model<U>, U>(parentSelector: string, regions: RegionMap<T, U>): void => {
 		const parent = createOrGetElement(parentSelector)
-		const children = Dom.createChildNodes(parent, Object.keys(nodeMap))
+		const childSelectors = Object.keys(regions)
+		const children = Dom.createChildNodes(parent, childSelectors)
 
 		Dom.insertAtRoot(parent)
 
 		for (const [selector, parent] of Object.entries(children)) {
-			const initializeView = nodeMap[selector]
+			const initializeView = regions[selector]
 			initializeView(parent).renderDOM()
 		}
 	}

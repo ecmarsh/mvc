@@ -4,20 +4,11 @@ type ElementAbstractFactory = (
 ) => Element
 
 export let createOrGetElement: ElementAbstractFactory
-createOrGetElement = function (elementSelector, parentSelector) {
-	let parentElement: Element | undefined
-	let element = document.querySelector(elementSelector)
-
-	if (parentSelector) {
-		parentElement = createOrGetElement(parentSelector)
-	}
-
-	if (parentElement && element) {
-		parentElement.append(element)
-	}
+createOrGetElement = function (selector) {
+	let element = document.querySelector(selector)
 
 	if (!element) {
-		const [tagName, attrDescriptor] = parseSelector(elementSelector)
+		const [tagName, attrDescriptor] = parseSelector(selector)
 		const isAttribute: boolean = !!attrDescriptor.value
 
 		element = document.createElement(tagName)
@@ -25,10 +16,6 @@ createOrGetElement = function (elementSelector, parentSelector) {
 		if (isAttribute) {
 			addAttributeToElement(element, attrDescriptor)
 		}
-
-		parentElement
-			? parentElement.append(element)
-			: insertAtRoot(element)
 	}
 
 	return element
@@ -44,13 +31,6 @@ function addAttributeToElement(element: Element, attrDescriptor: AttributeDescri
 		: addClassAttr()
 }
 
-function insertAtRoot(insertedElement: Element): void {
-	bodyNode.insertBefore(insertedElement, firstScriptNode)
-}
-
-const bodyNode = document.querySelector('body') as HTMLBodyElement
-const [firstScriptNode] = Array.from(bodyNode.querySelectorAll('script'))
-
 type ParsedSelector = [string, AttributeDescriptor]
 
 interface AttributeDescriptor {
@@ -58,9 +38,10 @@ interface AttributeDescriptor {
 	value: string
 }
 
-function parseSelector(cssLikeSelector: string): ParsedSelector {
-	const htmlTagName = matchTagName(cssLikeSelector) || 'div'
-	const attrSelector = matchAttribute(cssLikeSelector)
+function parseSelector(selector: string): ParsedSelector {
+	const htmlTagName = matchTagName(selector) || 'div'
+	const attrSelector = matchAttribute(selector)
+
 	const attrDescriptor: AttributeDescriptor = {
 		type: attrSelector ? classOrId(attrSelector) : '',
 		value: attrSelector ? attrSelector.substring(1) : ''
@@ -69,21 +50,21 @@ function parseSelector(cssLikeSelector: string): ParsedSelector {
 	return [htmlTagName, attrDescriptor]
 }
 
-function matchTagName(cssLikeSelector: string): string | null {
+function matchTagName(selector: string): string | null {
 	const { anythingBeforeSelectorChar: tagMatch } = regexes
-	const [htmlTag] = cssLikeSelector.match(tagMatch) || [null]
+	const [htmlTag] = selector.match(tagMatch) || [null]
 	return htmlTag
 }
 
-function matchAttribute(cssLikeSelector: string): string | null {
+function matchAttribute(selector: string): string | null {
 	const { selectorCharAndTrailing: attrMatch } = regexes
-	const [attrSelector] = cssLikeSelector.match(attrMatch) || [null]
+	const [attrSelector] = selector.match(attrMatch) || [null]
 	return attrSelector
 }
 
 const regexes = {
 	anythingBeforeSelectorChar: /.+(?=\.|#)/g,
-	selectorCharAndTrailing: / [.#].+ /g,
+	selectorCharAndTrailing: /[.#].+/g,
 	beginsWithHash: / [.#].+ /g
 }
 

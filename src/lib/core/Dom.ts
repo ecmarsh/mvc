@@ -4,8 +4,12 @@ import { createOrGetElement } from '../elementKit'
 import { Renderable } from './types'
 
 
-export interface NodeMap<T extends Model<U>, U> {
-	[cssLikeSelector: string]: (cssLikeSelector: string) => View<T, U>
+export interface RegionMap<T extends Model<U>, U> {
+	[cssLikeSelector: string]: (parent: Element) => View<T, U>
+}
+
+export interface NodeMap {
+	[cssLikeSelector: string]: Element
 }
 
 export default class Dom {
@@ -13,22 +17,32 @@ export default class Dom {
 		renderables.forEach(renderable => renderable.renderDOM())
 	}
 
-	static renderNodeMap = <T extends Model<U>, U>(parentSelector: string, nodeMap: NodeMap<T, U>): void => {
-		Dom.createContainer(parentSelector)
-		Dom.createChildNodes(parentSelector, Object.keys(nodeMap))
+	static renderNodeMap = <T extends Model<U>, U>(parentSelector: string, nodeMap: RegionMap<T, U>): void => {
+		const parent = createOrGetElement(parentSelector)
+		const children = Dom.createChildNodes(parent, Object.keys(nodeMap))
 
-		for (const [selector, initView] of Object.entries(nodeMap)) {
-			initView(selector).renderDOM()
+		Dom.insertAtRoot(parent)
+
+		for (const [selector, parent] of Object.entries(children)) {
+			const initializeView = nodeMap[selector]
+			initializeView(parent).renderDOM()
 		}
 	}
 
-	static createContainer = (containerSelector: string): void => {
-		createOrGetElement(containerSelector)
-	}
-
-	static createChildNodes = (containerSelector: string, selectors: string[]): void => {
+	static createChildNodes = (parent: Element, selectors: string[]): NodeMap => {
+		const elementNodeMap: NodeMap = {}
 		for (const selector of selectors) {
-			createOrGetElement(selector, containerSelector)
+			const child = createOrGetElement(selector)
+			elementNodeMap[selector] = child
+			parent.append(child)
 		}
+		return elementNodeMap
+	}
+
+	static insertAtRoot = (element: Element): void => {
+		const bodyNode = document.querySelector('body') as HTMLBodyElement
+		const [firstScriptNode] = Array.from(bodyNode.querySelectorAll('script'))
+
+		bodyNode.insertBefore(element, firstScriptNode)
 	}
 }

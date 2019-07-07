@@ -1,7 +1,13 @@
 import { UserView, UserModel } from './UserView'
 import { createPropList } from './createPropList'
 
+interface EventMap {
+	[key: string]: (...args: any[]) => any
+}
+
 export class UserInfo extends UserView {
+	eventMap: EventMap
+
 	constructor(model: UserModel, selector: string) {
 		super(model, selector)
 		this.eventMap = {
@@ -11,7 +17,6 @@ export class UserInfo extends UserView {
 
 	render = (): string => `
 		<div>
-			<h1>User Form</h1>
 			${createPropList(['name', 'age'], this.model)}
 		</div>
 	`

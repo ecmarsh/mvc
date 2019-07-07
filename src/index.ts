@@ -1,5 +1,4 @@
-import { Dom, NodeMap } from './lib'
-
+import { Dom, RegionMap } from './lib'
 import { User, UserProps } from './models/User'
 import { UserForm, UserInfo } from './views/User'
 
@@ -16,9 +15,11 @@ userCollection.fetch()
 
 const user = User.build(sampleProps)
 
-const nodeMap: NodeMap<User, UserProps> = {
-	'div#user': (selector: string) => new UserInfo(user, selector),
-	'div.userForm': (selector: string) => new UserForm(user, selector)
+const nodeMap: RegionMap<User, UserProps> = {
+	'div#user': (parent: Element) => new UserInfo(user, parent),
+	'div.userForm': (parent: Element) => new UserForm(user, parent)
 }
 
-Dom.renderNodeMap('main.node-container', nodeMap)
+setTimeout(() => {
+	Dom.renderNodeMap('main.node-container', nodeMap)
+}, 0)

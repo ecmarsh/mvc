@@ -1,20 +1,17 @@
 import Model from './Model'
 import Template from './Template'
-import { createOrGetElement } from '../elementKit'
 import { EventMap, DOMRenderer } from './types'
 
 export default abstract class View<T extends Model<U>, U> {
 	abstract render: () => string
 
-	public parent: Element
 	public template: Template
 	protected eventMap: EventMap = {}
 
 	constructor(
 		public model: T,
-		private selector: string,
+		public parent: Element,
 	) {
-		this.parent = createOrGetElement(this.selector)
 		this.template = new Template()
 		this._bindViewToModel()
 	}

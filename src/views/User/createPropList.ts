@@ -13,7 +13,7 @@ export const createPropList: CreatePropList = (props, model) => {
 		appendListWith(newListItem)
 	}
 
-	closeList()
+	appendListWith(`</ul>`)
 
 	return list
 
@@ -24,11 +24,6 @@ export const createPropList: CreatePropList = (props, model) => {
 				${model.constructor.name} ${prop}: ${model.get(prop)}
 			</li>
 		`
-	}
-
-	function closeList(): void {
-		const closingTag = `</ul>`
-		appendListWith(closingTag)
 	}
 
 	function appendListWith(listItem: string): void {

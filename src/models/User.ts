@@ -36,4 +36,12 @@ export class User extends Model<UserProps> {
 		new Observer(),
 		new ApiSync<UserProps>(api, User.dataEndpoint)
 	)
+
+	constructor(
+		attrHandler: Attributes,
+		observer: Observer,
+		sync: ApiSync
+	) {
+		super(attrHandler, observer, sync)
+	}
 }

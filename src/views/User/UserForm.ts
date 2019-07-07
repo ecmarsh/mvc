@@ -78,21 +78,15 @@ export class UserForm extends UserView {
 	render = (): string => `
 		<form>
 			${this.errorHandler.flash()}
-
 			<label>User Name
-				<input type="text" placeholder="New User Name" />
+				<input type="text" placeholder="${this.model.get('name')}" />
 			</label>
-
 			<br />
-
 			<label>User Age
-				<input type="number" placeholder="New User Age"/>
+				<input type="number" placeholder="${this.model.get('age')}"/>
 			</label>
-
 			<br />
-
 			<button type="submit">Save User Data</button>
-
 		</form>
 	`
 }

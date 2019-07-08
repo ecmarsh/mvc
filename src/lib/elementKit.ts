@@ -21,14 +21,23 @@ createOrGetElement = function (selector) {
 	return element
 }
 
-function addAttributeToElement(element: Element, attrDescriptor: AttributeDescriptor): void {
+export function addAttributeToElement(element: Element, attrDescriptor: AttributeDescriptor): Element {
 	const { type, value } = attrDescriptor
-	const addIdAttr = (): void => { element.id = value }
-	const addClassAttr = (): void => { element.classList.add(value) }
+
+	const addIdAttr = (el: Element): Element => {
+		el.id = value
+		return el
+	}
+	const addClassAttr = (el: Element): Element => {
+		el.classList.add(value)
+		return el
+	}
 
 	type === 'id'
-		? addIdAttr()
-		: addClassAttr()
+		? addIdAttr(element)
+		: addClassAttr(element)
+
+	return element
 }
 
 type ParsedSelector = [string, AttributeDescriptor]
@@ -38,7 +47,7 @@ interface AttributeDescriptor {
 	value: string
 }
 
-function parseSelector(selector: string): ParsedSelector {
+export function parseSelector(selector: string): ParsedSelector {
 	const htmlTagName = matchTagName(selector) || 'div'
 	const attrSelector = matchAttribute(selector)
 
@@ -50,13 +59,13 @@ function parseSelector(selector: string): ParsedSelector {
 	return [htmlTagName, attrDescriptor]
 }
 
-function matchTagName(selector: string): string | null {
+export function matchTagName(selector: string): string | null {
 	const { anythingBeforeSelectorChar: tagMatch } = regexes
 	const [htmlTag] = selector.match(tagMatch) || [null]
 	return htmlTag
 }
 
-function matchAttribute(selector: string): string | null {
+export function matchAttribute(selector: string): string | null {
 	const { selectorCharAndTrailing: attrMatch } = regexes
 	const [attrSelector] = selector.match(attrMatch) || [null]
 	return attrSelector
@@ -65,14 +74,15 @@ function matchAttribute(selector: string): string | null {
 const regexes = {
 	anythingBeforeSelectorChar: /.+(?=\.|#)/g,
 	selectorCharAndTrailing: /[.#].+/g,
-	beginsWithHash: / [.#].+ /g
+	beginsWithHash: /^#/g
 }
 
 enum AttrType {
 	id = 'id',
 	class = 'class'
 }
-function classOrId(attrSelector: string): AttrType {
+
+export function classOrId(attrSelector: string): AttrType {
 	const { beginsWithHash } = regexes
 	const isIdAttr = beginsWithHash.test(attrSelector)
 	return isIdAttr ? AttrType.id : AttrType.class

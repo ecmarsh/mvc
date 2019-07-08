@@ -1,6 +1,5 @@
+import * as _ from 'lodash'
 import { ModelData, AttrHandler, Observes, Synchronizes } from './types'
-import { compareDeep } from '../utils'
-
 
 export default class Model<T extends ModelData> {
 	constructor(
@@ -13,10 +12,11 @@ export default class Model<T extends ModelData> {
 	public get = this.attributes.get
 	public set = (updatedData: T): T => {
 		const prevData = this.attributes.getAll()
-		const hasChanged = !compareDeep(prevData, updatedData)
+		const hasChanged = !_.isEqual(prevData, updatedData)
+
 		if (hasChanged) {
 			this.attributes.set(updatedData)
-			this.trigger('change')
+			this.trigger('change', updatedData)
 		}
 
 		return updatedData

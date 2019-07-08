@@ -32,6 +32,4 @@ const setupUserList = (): Collection => {
 
 setupUserList().fetch()
 
-setTimeout(() => {
-	Dom.render('main.node-container', regions)
-}, 500)
+Dom.render('main.node-container', regions)

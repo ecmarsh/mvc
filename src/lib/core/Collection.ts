@@ -4,7 +4,7 @@ import { Api } from '../api'
 
 export default class Collection<T, U extends ModelData> {
 	private models: Array<T>
-	private events: Observer
+	private observer: Observer
 
 	constructor(
 		private deserialize: Deserializer<T, U>,
@@ -12,18 +12,18 @@ export default class Collection<T, U extends ModelData> {
 		private endpoint: string,
 	) {
 		this.models = []
-		this.events = new Observer()
+		this.observer = new Observer()
 	}
 
 	public get on() {
-		return this.events.on
+		return this.observer.on
 	}
 	public get off() {
-		return this.events.off
+		return this.observer.off
 	}
 
 	public get trigger() {
-		return this.events.trigger
+		return this.observer.trigger
 	}
 
 	public fetch = (): void => {

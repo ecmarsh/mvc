@@ -1,22 +1,24 @@
 type ErrorMessage = string
 
-export class ErrorHandler {
-	protected errorMessage: ErrorMessage
+export class Flash {
+	protected error?: Error
 
 	constructor() {
-		this.errorMessage = ''
+		this.error = void Error()
 	}
 
-	public set = (message: ErrorMessage): void => {
-		this.errorMessage = message
+	public set = (error?: Error): void => {
+		this.error = error || undefined
 	}
 
-	public get = (): ErrorMessage => {
-		return this.errorMessage
+	public get = (): ErrorMessage | undefined => {
+		if (this.error) {
+			return this.error.message
+		}
 	}
 
 	public clear = (): void => {
-		this.set('')
+		this.set(undefined)
 	}
 
 	public flash = (): string => {

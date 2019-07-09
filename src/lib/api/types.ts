@@ -13,7 +13,7 @@ export interface AxiosWrapper {
 	getCollection: GetCollection
 }
 
-export type InitApi = (port?: string) => AxiosWrapper
+export type InitApi = (baseURL: string) => AxiosWrapper
 export type CreateModel = (endpoint: string, data: ModelData) => ApiPromise
 export type UpdateModel = (endpoint: string, id: Id, data: ModelData) => ApiPromise
 export type GetModel = (endpoint: string, id: Id) => ApiPromise

@@ -9,6 +9,10 @@ export class Api implements AxiosWrapper {
 		this.api = axios.create({ baseURL })
 	}
 
+	static createInstance: InitApi = (baseURL) => {
+		return new Api(baseURL)
+	}
+
 	createModel: CreateModel = (endpoint, data) => {
 		return this.api.post(`/${trimmed(endpoint)}/`, data)
 	}
@@ -24,11 +28,6 @@ export class Api implements AxiosWrapper {
 	getCollection: GetCollection = endpoint => {
 		return this.api.get(`/${trimmed(endpoint)}/`)
 	}
-}
-
-export const initApi: InitApi = port => {
-	const baseURL = `http://localhost:${port}`
-	return new Api(baseURL)
 }
 
 export default Api

@@ -6,11 +6,11 @@ export type ApiPromise = AxiosPromise
 export type ApiError = AxiosError
 
 export interface AxiosWrapper {
-	api: ApiInstance
-	createModel: CreateModel
-	updateModel: UpdateModel
-	getModel: GetModel
-	getCollection: GetCollection
+  api: ApiInstance
+  createModel: CreateModel
+  updateModel: UpdateModel
+  getModel: GetModel
+  getCollection: GetCollection
 }
 
 export type InitApi = (baseURL: string) => AxiosWrapper
@@ -20,7 +20,7 @@ export type GetModel = (endpoint: string, id: Id) => ApiPromise
 export type GetCollection = (endpoint: string) => ApiPromise
 
 export interface ModelData {
-	id?: Id
-	[key: string]: any
+  id?: Id
+  [key: string]: any
 }
 type Id = number
